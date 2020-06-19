@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // const arr = ['2019','云南','珠海','昆明']
+        // let ProxyArray = new Proxy(arr,{
+        //     get:(target,name,property)=>{
+
+        //         console.log('开始拦截')
+        //         console.log(target)
+        //         console.log(name,property)
+        //      return Reflect.get(target,name,property)
+        //     },
+        //     set:(target,name,value)=>{
+        //         console.log('触发了set方法',target,name,value)
+        //         Reflect.set(target,name,value)
+        //     }
+        // })
+        // ProxyArray[0]
+        // ProxyArray[3] = '佛山'
+        
+
+        // let map = new Map([['name','祝号']])
+        // let mapProxy = new Proxy(map,{
+        //     get(target,name,receiver){
+        //         console.log('触发了',target,name,receiver)
+        //         const value = Reflect.get(...arguments)
+        //         //代理对象里面的this是指向Proxy实例
+        //         return typeof value == 'function' ? value.bind(target):value
+        //     },
+            
+        // })
+        // console.log(mapProxy.get('name'))
+        // mapProxy.set('name','11')
+        // console.log(mapProxy.get('name'))
+
+
+
+
+        // let map = new Set(['age','祝号'])
+        // let mapProxy = new Proxy(map,{
+        //     get(target,name,receiver){
+        //         console.log('触发了',target,name,receiver)
+                
+        //         return Reflect.get(...arguments)
+        //     },
+            
+        // })
+        // console.log(mapProxy.add(1))
+        //mapProxy.set('age','11')
+        //console.log(mapProxy.get('age'))
+
+
+        function Super(){
+	this.flag = true;
+}
+
+Super.prototype.getFlag = function() {
+	return this.flag;
+}
+
+function Sub() {
+	this.subFlag = false;
+	Super.call(this)
+}
+
+Sub.prototype = new Super();
+var obj = new Sub();
+var obj2 = new Sub();
+Sub.prototype.constructor = Sub;
+// Super.prototype.getSubFlag = function() {
+// 	return this.flag;
+// }
+Sub.prototype.flag = false
+console.log(obj,Sub.prototype.getFlag(),obj2)
+
+
+       
+    </script>
+</body>
+</html>

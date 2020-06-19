@@ -37,9 +37,9 @@ class KVue{
 
     }
 
-    defineReactive(obj,key,val){
+    defineReactive(obj,key,val){//产生了对value值的闭包，
         //每个key都有一个dep依赖,一个dep里面有多个watch
-        const dep=new Dep();
+        const dep=new Dep(); 
         //给obj添加了key的属性,并且key带有两个方法get与set
         Object.defineProperty(obj,key,{
             get(){
@@ -48,9 +48,9 @@ class KVue{
                 return val;
             },
             set(newVal){
-                if(newVal !== val){
-                    val = newVal;
-                    //console.log(`${key}更新了: ${newVal}`);
+                if(newVal !== val){ 
+                    val = newVal;//set函数是对闭包变量进行修改
+                    //让变量的修改能被感知到
 
                     //通知key对应的所有watcher更新
                     dep.notify();
@@ -62,6 +62,7 @@ class KVue{
     }
 }
 
+//与data中的属性是一对一的关系
 class Dep{
     constructor(){
         this.deps=[];//里面有同一个key对应的多个watch
@@ -80,11 +81,11 @@ class Watcher{
         this.vm=vm;
         this.key=key;
         this.cb=cb;
-        Dep.target=this; //只要调用get就会生成一个与之对应的watch
-        this.vm[this.key];//触发get函数读一下key对应的属性 ，就是将watcher添加到dep中
+        Dep.target=this; // 只要调用get就会生成一个与之对应的watch
+        this.vm[this.key];// 触发get函数读一下key对应的属性 ，就是将watcher添加到dep中
         Dep.target=null
         console.log(Dep.target);
-    }
+    } 
     update(){
         //console.log('属性更新了');
         this.cb.call(this.vm,this.vm[this.key]);

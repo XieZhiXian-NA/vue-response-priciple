@@ -16,7 +16,7 @@ class Compile{
         //原生js 生成一个fragment标签
         const fragment = document.createDocumentFragment();
         let child;
-        while(child = el.firstChild) {
+        while(child = el.firstChild) {//不仅仅是简单的赋值操作，还是移出到另一个
             console.log(el.firstChild);
             fragment.appendChild(child);
         }
@@ -29,7 +29,7 @@ class Compile{
        console.log('chidNodes',childNodes);
        Array.from(childNodes).forEach(node=>{
            if(node.nodeType === 1){
-               //1 element节点
+               //1 element节点 <P></P> <h></h>
                 //console.log('编译元素节点'+node.nodeName); 
                 this.CompileElement(node);  
            }else if(this.isInterPolation(node)){
@@ -96,13 +96,14 @@ class Compile{
     update(node, vm, exp, dir) {
         let updateFn = this[dir + 'Updator'];
         //vm[exp] 设置了代理 可以拿到data里面key为exp的value值
+        // 第一次初始化 收集依赖 首次给页面赋值
         updateFn && updateFn(node, vm[exp]);
         //依赖收集
         new Watcher(vm, exp, function(value){
             updateFn && updateFn(node, value);
         })
     }
-    
+     
     textUpdator(node, val){
         node.textContent = val;
     }
