@@ -49,12 +49,19 @@ class KVueRouter {
           }
       })
       Vue.Component('router-view',{
-          render:(h)=>{
-              //箭头函数保留this指向
-              // 使用函数式组件，将需要的参数从上下文中拿到
-              const Component = this.routeMap[this.app.current]
-              return h(Component)
-          }
+        //   render:(h)=>{
+        //       //箭头函数保留this指向
+        //       // 使用函数式组件，将需要的参数从上下文中拿到
+        //       const Component = this.routeMap[this.app.current]
+        //       return h(Component)
+        //   }
+        functional:true,
+        render(h,{parent}){
+            let router = parent.$router
+            const Component = router.routeMap[this.app.current]
+            return h(Component)
+
+        }
       })
   }
 }

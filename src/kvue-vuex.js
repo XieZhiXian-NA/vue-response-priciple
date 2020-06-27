@@ -13,6 +13,7 @@ class KVuex {
       //当前的store对象，所以需要使用绑定this指向，使其的函数体内的this始终指向store
       this.commit = this.commit.bind(this);
       this.dispatch = this.dispatch.bind(this);
+      options.getters && this.handleGetters(options.getters)
     }
 
     commit(type,arg){
@@ -21,6 +22,14 @@ class KVuex {
 
     dispatch(type,arg){
       return  this.actions[type](this,arg)
+    }
+    handleGetters(getters){
+        this.getters = {}
+        Object.keys(getters).forEach(key=>{
+            Object.defineProperty(this.getters,key,{
+                get:()=>{return getters[key](this.state)}
+            })
+        })
     }
 }
 
